@@ -16,6 +16,12 @@ type {{.StructName}} struct {
     // See: {{$property.Documentation}}
     {{$name}} {{if (or ($property.IsPolymorphic) ($property.IsCustomType) )}}*{{end}}{{$property.GoType $.Basename $name}} `json:"{{$name}},omitempty"`
     {{end}}
+
+    {{if eq .Name "AWS::AutoScaling::AutoScalingGroup" "AWS::EC2::Instance" "AWS::CloudFormation::WaitCondition"}}CreationPolicy map[string]interface{} `json:"-"`{{end}}
+    DeletionPolicy *string `json:"-"`
+    DependsOn *[]string `json:"-"`
+    Metadata *map[string]interface{} `json:"-"`
+    {{if eq .Name "AWS::AutoScaling::AutoScalingGroup" "AWS::Lambda::Alias"}}UpdatePolicy map[string]interface{} `json:"-"`{{end}}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -29,10 +35,18 @@ func (r *{{.StructName}}) MarshalJSON() ([]byte, error) {
 	type Properties {{.StructName}}
 	return json.Marshal(&struct{
 		Type string
+		{{if eq .Name "AWS::AutoScaling::AutoScalingGroup" "AWS::EC2::Instance" "AWS::CloudFormation::WaitCondition"}}CreationPolicy map[string]interface{} `json:",omitempty"`{{end}}
+		DependsOn *[]string `json:",omitempty"`
+		Metadata *map[string]interface{} `json:",omitempty"`
 		{{if .IsCustomProperty}}Properties{{else}}Properties Properties{{end}}
+		{{if eq .Name "AWS::AutoScaling::AutoScalingGroup" "AWS::Lambda::Alias"}}UpdatePolicy map[string]interface{} `json:",omitempty"`{{end}}
 	}{
 		Type: r.AWSCloudFormationType(),
+		{{if eq .Name "AWS::AutoScaling::AutoScalingGroup" "AWS::EC2::Instance" "AWS::CloudFormation::WaitCondition"}}CreationPolicy: r.CreationPolicy,{{end}}
+		DependsOn: r.DependsOn,
+		Metadata: r.Metadata,
 		Properties: (Properties)(*r),
+		{{if eq .Name "AWS::AutoScaling::AutoScalingGroup" "AWS::Lambda::Alias"}}UpdatePolicy: r.UpdatePolicy,{{end}}
 	})
 }
 
