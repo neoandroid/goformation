@@ -19,6 +19,10 @@ type AWSWAFRegionalByteMatchSet struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafregional-bytematchset.html#cfn-wafregional-bytematchset-name
 	Name string `json:"Name,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -31,10 +35,16 @@ func (r *AWSWAFRegionalByteMatchSet) AWSCloudFormationType() string {
 func (r *AWSWAFRegionalByteMatchSet) MarshalJSON() ([]byte, error) {
 	type Properties AWSWAFRegionalByteMatchSet
 	return json.Marshal(&struct {
-		Type       string
+		Type string
+
+		DependsOn  *[]string               `json:",omitempty"`
+		Metadata   *map[string]interface{} `json:",omitempty"`
 		Properties Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:  r.DependsOn,
+		Metadata:   r.Metadata,
 		Properties: (Properties)(*r),
 	})
 }

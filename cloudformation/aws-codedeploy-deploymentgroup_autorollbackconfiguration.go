@@ -13,6 +13,10 @@ type AWSCodeDeployDeploymentGroup_AutoRollbackConfiguration struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-autorollbackconfiguration.html#cfn-codedeploy-deploymentgroup-autorollbackconfiguration-events
 	Events []string `json:"Events,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

@@ -63,6 +63,10 @@ type AWSEC2Instance_NetworkInterface struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-network-iface-embedded.html#aws-properties-ec2-network-iface-embedded-subnetid
 	SubnetId string `json:"SubnetId,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

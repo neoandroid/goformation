@@ -33,6 +33,10 @@ type AWSRDSOptionGroup_OptionConfiguration struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-optiongroup-optionconfigurations.html#cfn-rds-optiongroup-optionconfigurations-vpcsecuritygroupmemberships
 	VpcSecurityGroupMemberships []string `json:"VpcSecurityGroupMemberships,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

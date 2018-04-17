@@ -69,6 +69,10 @@ type AWSApiGatewayMethod struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-restapiid
 	RestApiId string `json:"RestApiId,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -81,10 +85,16 @@ func (r *AWSApiGatewayMethod) AWSCloudFormationType() string {
 func (r *AWSApiGatewayMethod) MarshalJSON() ([]byte, error) {
 	type Properties AWSApiGatewayMethod
 	return json.Marshal(&struct {
-		Type       string
+		Type string
+
+		DependsOn  *[]string               `json:",omitempty"`
+		Metadata   *map[string]interface{} `json:",omitempty"`
 		Properties Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:  r.DependsOn,
+		Metadata:   r.Metadata,
 		Properties: (Properties)(*r),
 	})
 }

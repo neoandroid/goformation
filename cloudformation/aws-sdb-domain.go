@@ -14,6 +14,10 @@ type AWSSDBDomain struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-simpledb.html#cfn-sdb-domain-description
 	Description string `json:"Description,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -26,10 +30,16 @@ func (r *AWSSDBDomain) AWSCloudFormationType() string {
 func (r *AWSSDBDomain) MarshalJSON() ([]byte, error) {
 	type Properties AWSSDBDomain
 	return json.Marshal(&struct {
-		Type       string
+		Type string
+
+		DependsOn  *[]string               `json:",omitempty"`
+		Metadata   *map[string]interface{} `json:",omitempty"`
 		Properties Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:  r.DependsOn,
+		Metadata:   r.Metadata,
 		Properties: (Properties)(*r),
 	})
 }

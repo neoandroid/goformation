@@ -24,6 +24,10 @@ type AWSIAMInstanceProfile struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html#cfn-iam-instanceprofile-roles
 	Roles []string `json:"Roles,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -36,10 +40,16 @@ func (r *AWSIAMInstanceProfile) AWSCloudFormationType() string {
 func (r *AWSIAMInstanceProfile) MarshalJSON() ([]byte, error) {
 	type Properties AWSIAMInstanceProfile
 	return json.Marshal(&struct {
-		Type       string
+		Type string
+
+		DependsOn  *[]string               `json:",omitempty"`
+		Metadata   *map[string]interface{} `json:",omitempty"`
 		Properties Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:  r.DependsOn,
+		Metadata:   r.Metadata,
 		Properties: (Properties)(*r),
 	})
 }

@@ -13,6 +13,10 @@ type AWSElasticBeanstalkApplication_ApplicationResourceLifecycleConfig struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticbeanstalk-application-applicationresourcelifecycleconfig.html#cfn-elasticbeanstalk-application-applicationresourcelifecycleconfig-versionlifecycleconfig
 	VersionLifecycleConfig *AWSElasticBeanstalkApplication_ApplicationVersionLifecycleConfig `json:"VersionLifecycleConfig,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

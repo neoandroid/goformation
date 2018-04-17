@@ -34,6 +34,11 @@ type AWSLambdaAlias struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-alias.html#cfn-lambda-alias-routingconfig
 	RoutingConfig *AWSLambdaAlias_AliasRoutingConfiguration `json:"RoutingConfig,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
+	UpdatePolicy   map[string]interface{}  `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -46,11 +51,19 @@ func (r *AWSLambdaAlias) AWSCloudFormationType() string {
 func (r *AWSLambdaAlias) MarshalJSON() ([]byte, error) {
 	type Properties AWSLambdaAlias
 	return json.Marshal(&struct {
-		Type       string
-		Properties Properties
+		Type string
+
+		DependsOn    *[]string               `json:",omitempty"`
+		Metadata     *map[string]interface{} `json:",omitempty"`
+		Properties   Properties
+		UpdatePolicy map[string]interface{} `json:",omitempty"`
 	}{
-		Type:       r.AWSCloudFormationType(),
-		Properties: (Properties)(*r),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:    r.DependsOn,
+		Metadata:     r.Metadata,
+		Properties:   (Properties)(*r),
+		UpdatePolicy: r.UpdatePolicy,
 	})
 }
 

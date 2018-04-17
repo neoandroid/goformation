@@ -14,6 +14,10 @@ type AWSEC2SpotFleet struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-spotfleet.html#cfn-ec2-spotfleet-spotfleetrequestconfigdata
 	SpotFleetRequestConfigData *AWSEC2SpotFleet_SpotFleetRequestConfigData `json:"SpotFleetRequestConfigData,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -26,10 +30,16 @@ func (r *AWSEC2SpotFleet) AWSCloudFormationType() string {
 func (r *AWSEC2SpotFleet) MarshalJSON() ([]byte, error) {
 	type Properties AWSEC2SpotFleet
 	return json.Marshal(&struct {
-		Type       string
+		Type string
+
+		DependsOn  *[]string               `json:",omitempty"`
+		Metadata   *map[string]interface{} `json:",omitempty"`
 		Properties Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:  r.DependsOn,
+		Metadata:   r.Metadata,
 		Properties: (Properties)(*r),
 	})
 }

@@ -19,6 +19,10 @@ type AWSWAFXssMatchSet struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-waf-xssmatchset.html#cfn-waf-xssmatchset-xssmatchtuples
 	XssMatchTuples []AWSWAFXssMatchSet_XssMatchTuple `json:"XssMatchTuples,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -31,10 +35,16 @@ func (r *AWSWAFXssMatchSet) AWSCloudFormationType() string {
 func (r *AWSWAFXssMatchSet) MarshalJSON() ([]byte, error) {
 	type Properties AWSWAFXssMatchSet
 	return json.Marshal(&struct {
-		Type       string
+		Type string
+
+		DependsOn  *[]string               `json:",omitempty"`
+		Metadata   *map[string]interface{} `json:",omitempty"`
 		Properties Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:  r.DependsOn,
+		Metadata:   r.Metadata,
 		Properties: (Properties)(*r),
 	})
 }

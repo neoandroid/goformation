@@ -24,6 +24,11 @@ type AWSCloudFormationWaitCondition struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-waitcondition.html#cfn-waitcondition-timeout
 	Timeout string `json:"Timeout,omitempty"`
+
+	CreationPolicy map[string]interface{}  `json:"-"`
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -36,11 +41,17 @@ func (r *AWSCloudFormationWaitCondition) AWSCloudFormationType() string {
 func (r *AWSCloudFormationWaitCondition) MarshalJSON() ([]byte, error) {
 	type Properties AWSCloudFormationWaitCondition
 	return json.Marshal(&struct {
-		Type       string
-		Properties Properties
+		Type           string
+		CreationPolicy map[string]interface{}  `json:",omitempty"`
+		DependsOn      *[]string               `json:",omitempty"`
+		Metadata       *map[string]interface{} `json:",omitempty"`
+		Properties     Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
-		Properties: (Properties)(*r),
+		Type:           r.AWSCloudFormationType(),
+		CreationPolicy: r.CreationPolicy,
+		DependsOn:      r.DependsOn,
+		Metadata:       r.Metadata,
+		Properties:     (Properties)(*r),
 	})
 }
 

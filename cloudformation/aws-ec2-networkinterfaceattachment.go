@@ -29,6 +29,10 @@ type AWSEC2NetworkInterfaceAttachment struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-interface-attachment.html#cfn-ec2-network-interface-attachment-networkinterfaceid
 	NetworkInterfaceId string `json:"NetworkInterfaceId,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -41,10 +45,16 @@ func (r *AWSEC2NetworkInterfaceAttachment) AWSCloudFormationType() string {
 func (r *AWSEC2NetworkInterfaceAttachment) MarshalJSON() ([]byte, error) {
 	type Properties AWSEC2NetworkInterfaceAttachment
 	return json.Marshal(&struct {
-		Type       string
+		Type string
+
+		DependsOn  *[]string               `json:",omitempty"`
+		Metadata   *map[string]interface{} `json:",omitempty"`
 		Properties Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:  r.DependsOn,
+		Metadata:   r.Metadata,
 		Properties: (Properties)(*r),
 	})
 }

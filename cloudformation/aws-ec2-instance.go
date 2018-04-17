@@ -164,6 +164,11 @@ type AWSEC2Instance struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html#cfn-ec2-instance-volumes
 	Volumes []AWSEC2Instance_Volume `json:"Volumes,omitempty"`
+
+	CreationPolicy map[string]interface{}  `json:"-"`
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -176,11 +181,17 @@ func (r *AWSEC2Instance) AWSCloudFormationType() string {
 func (r *AWSEC2Instance) MarshalJSON() ([]byte, error) {
 	type Properties AWSEC2Instance
 	return json.Marshal(&struct {
-		Type       string
-		Properties Properties
+		Type           string
+		CreationPolicy map[string]interface{}  `json:",omitempty"`
+		DependsOn      *[]string               `json:",omitempty"`
+		Metadata       *map[string]interface{} `json:",omitempty"`
+		Properties     Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
-		Properties: (Properties)(*r),
+		Type:           r.AWSCloudFormationType(),
+		CreationPolicy: r.CreationPolicy,
+		DependsOn:      r.DependsOn,
+		Metadata:       r.Metadata,
+		Properties:     (Properties)(*r),
 	})
 }
 

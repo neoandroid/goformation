@@ -49,6 +49,10 @@ type AWSDirectoryServiceSimpleAD struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-vpcsettings
 	VpcSettings *AWSDirectoryServiceSimpleAD_VpcSettings `json:"VpcSettings,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -61,10 +65,16 @@ func (r *AWSDirectoryServiceSimpleAD) AWSCloudFormationType() string {
 func (r *AWSDirectoryServiceSimpleAD) MarshalJSON() ([]byte, error) {
 	type Properties AWSDirectoryServiceSimpleAD
 	return json.Marshal(&struct {
-		Type       string
+		Type string
+
+		DependsOn  *[]string               `json:",omitempty"`
+		Metadata   *map[string]interface{} `json:",omitempty"`
 		Properties Properties
 	}{
-		Type:       r.AWSCloudFormationType(),
+		Type: r.AWSCloudFormationType(),
+
+		DependsOn:  r.DependsOn,
+		Metadata:   r.Metadata,
 		Properties: (Properties)(*r),
 	})
 }

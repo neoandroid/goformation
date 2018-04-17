@@ -8,6 +8,10 @@ type AWSS3Bucket_BucketEncryption struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-bucketencryption.html#cfn-s3-bucket-bucketencryption-serversideencryptionconfiguration
 	ServerSideEncryptionConfiguration []AWSS3Bucket_ServerSideEncryptionRule `json:"ServerSideEncryptionConfiguration,omitempty"`
+
+	DeletionPolicy *string                 `json:"-"`
+	DependsOn      *[]string               `json:"-"`
+	Metadata       *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
