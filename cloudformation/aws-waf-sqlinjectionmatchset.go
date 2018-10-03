@@ -22,6 +22,8 @@ type AWSWAFSqlInjectionMatchSet struct {
 
 	// _deletionPolicy represents a CloudFormation DeletionPolicy
 	_deletionPolicy DeletionPolicy
+	DependsOn       *[]string               `json:"-"`
+	Metadata        *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -41,10 +43,14 @@ func (r AWSWAFSqlInjectionMatchSet) MarshalJSON() ([]byte, error) {
 	type Properties AWSWAFSqlInjectionMatchSet
 	return json.Marshal(&struct {
 		Type           string
+		DependsOn      *[]string               `json:",omitempty"`
+		Metadata       *map[string]interface{} `json:",omitempty"`
 		Properties     Properties
 		DeletionPolicy DeletionPolicy `json:"DeletionPolicy,omitempty"`
 	}{
 		Type:           r.AWSCloudFormationType(),
+		DependsOn:      r.DependsOn,
+		Metadata:       r.Metadata,
 		Properties:     (Properties)(r),
 		DeletionPolicy: r._deletionPolicy,
 	})

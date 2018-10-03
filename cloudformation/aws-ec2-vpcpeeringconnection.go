@@ -42,6 +42,8 @@ type AWSEC2VPCPeeringConnection struct {
 
 	// _deletionPolicy represents a CloudFormation DeletionPolicy
 	_deletionPolicy DeletionPolicy
+	DependsOn       *[]string               `json:"-"`
+	Metadata        *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -61,10 +63,14 @@ func (r AWSEC2VPCPeeringConnection) MarshalJSON() ([]byte, error) {
 	type Properties AWSEC2VPCPeeringConnection
 	return json.Marshal(&struct {
 		Type           string
+		DependsOn      *[]string               `json:",omitempty"`
+		Metadata       *map[string]interface{} `json:",omitempty"`
 		Properties     Properties
 		DeletionPolicy DeletionPolicy `json:"DeletionPolicy,omitempty"`
 	}{
 		Type:           r.AWSCloudFormationType(),
+		DependsOn:      r.DependsOn,
+		Metadata:       r.Metadata,
 		Properties:     (Properties)(r),
 		DeletionPolicy: r._deletionPolicy,
 	})

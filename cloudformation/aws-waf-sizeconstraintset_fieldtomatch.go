@@ -16,6 +16,8 @@ type AWSWAFSizeConstraintSet_FieldToMatch struct {
 
 	// _deletionPolicy represents a CloudFormation DeletionPolicy
 	_deletionPolicy DeletionPolicy
+	DependsOn       *[]string               `json:"-"`
+	Metadata        *map[string]interface{} `json:"-"`
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
