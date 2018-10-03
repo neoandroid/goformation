@@ -24,6 +24,8 @@ type {{.StructName}} struct {
 	{{ end }}
 	// _deletionPolicy represents a CloudFormation DeletionPolicy
 	_deletionPolicy DeletionPolicy
+	DependsOn *[]string `json:"-"`
+	Metadata *map[string]interface{} `json:"-"`
 
 }
 
@@ -58,12 +60,16 @@ func (r {{.StructName}}) MarshalJSON() ([]byte, error) {
 	type Properties {{.StructName}}
 	return json.Marshal(&struct{
 		Type string
+		DependsOn *[]string `json:",omitempty"`
+		Metadata *map[string]interface{} `json:",omitempty"`
 		{{if .IsCustomProperty}}Properties{{else}}Properties Properties{{end}}
 		DeletionPolicy DeletionPolicy `json:"DeletionPolicy,omitempty"`
 		{{if .HasUpdatePolicy}}UpdatePolicy *UpdatePolicy `json:"UpdatePolicy,omitempty"`{{end}}
 		{{if .HasCreationPolicy}}CreationPolicy *CreationPolicy `json:"CreationPolicy,omitempty"`{{end}}
 	}{
 		Type: r.AWSCloudFormationType(),
+		DependsOn: r.DependsOn,
+		Metadata: r.Metadata,
 		Properties: (Properties)(r),
 		DeletionPolicy: r._deletionPolicy,
 		{{if .HasUpdatePolicy}}UpdatePolicy: r._updatePolicy,{{end}}
