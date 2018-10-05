@@ -19,11 +19,16 @@ type AWSCloudFormationCustomResource struct {
 	_deletionPolicy DeletionPolicy
 	DependsOn       *[]string               `json:"-"`
 	Metadata        *map[string]interface{} `json:"-"`
+	_userDefinedProperties interface{}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
 func (r *AWSCloudFormationCustomResource) AWSCloudFormationType() string {
 	return "AWS::CloudFormation::CustomResource"
+}
+
+func (r *AWSCloudFormationCustomResource) SetUserDefinedProperties(properties interface{}) {
+	r._userDefinedProperties = properties
 }
 
 // SetDeletionPolicy applies an AWS CloudFormation DeletionPolicy to this resource
@@ -36,17 +41,22 @@ func (r *AWSCloudFormationCustomResource) SetDeletionPolicy(policy DeletionPolic
 // an AWS CloudFormation JSON resource's 'Properties' field and adds a 'Type'.
 func (r AWSCloudFormationCustomResource) MarshalJSON() ([]byte, error) {
 	type Properties AWSCloudFormationCustomResource
+	var p map[string]interface{}
+	jaws, _ := json.Marshal((Properties)(r))
+	json.Unmarshal(jaws, &p)
+	juser, _ := json.Marshal(r._userDefinedProperties)
+	json.Unmarshal(juser, &p)
 	return json.Marshal(&struct {
 		Type           string
 		DependsOn      *[]string               `json:",omitempty"`
 		Metadata       *map[string]interface{} `json:",omitempty"`
-		Properties     Properties
+		Properties     map[string]interface{}
 		DeletionPolicy DeletionPolicy `json:"DeletionPolicy,omitempty"`
 	}{
 		Type:           r.AWSCloudFormationType(),
 		DependsOn:      r.DependsOn,
 		Metadata:       r.Metadata,
-		Properties:     (Properties)(r),
+		Properties:     p,
 		DeletionPolicy: r._deletionPolicy,
 	})
 }
